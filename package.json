@@ -1,10 +1,7 @@
 {
-  "name": "com.eastylabs.rosalina",
-  "version": "1.1.0",
-  "type": "tool",
-  "displayName": "Rosalina",
-  "unity": "2021.2",
-  "description": "Rosalina is an UI Toolkit extension tool that generates C# binding scripts based on a UXML template.",
-  "hideInEditor": true,
-  "unityRelease": "7f1"
+  "name": "com.tactilegames.uielements-code-behind",
+  "version": "0.0.1",
+  "displayName": "UIElements Code Behind",
+  "unity": "2021.3",
+  "description": "UIElements Code Behind is an UIElements extension tool that generates C# binding scripts based on a UXML template.",
 }
