@@ -1,0 +1,26 @@
+{
+    "overrideReferences": true,
+    "noEngineReferences": false,
+    "autoReferenced": false,
+    "name": "com.tactilegames.uielements-code-behind.editor.tests",
+    "allowUnsafeContext": false,
+    "defineConstraints": [
+        "UNITY_INCLUDE_TESTS"
+    ],
+    "optionalUnityReferences": [],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "references": [
+        "UnityEngine.TestRunner",
+        "UnityEditor.TestRunner",
+        "com.tactilegames.uielements-code-behind",
+        "com.tactilegames.uielements-code-behind.editor"
+    ],
+    "excludePlatforms": [],
+    "precompiledReferences": [
+        "nunit.framework.dll",
+        "NSubstitute.dll",
+        "Rosalina.RoslynLibrary.dll"
+    ]
+}
