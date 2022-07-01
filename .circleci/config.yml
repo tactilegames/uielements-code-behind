@@ -12,12 +12,12 @@ all-cheats: &all-cheats [
 ]
 
 all-unity-versions: &all-unity-versions [
-2020
+2021
 ]
 
 workflows:
   version: 2
-   
+  
   verify-development-commit:
     jobs:
       - commit-validation:
@@ -28,7 +28,14 @@ workflows:
               platform: *all-platforms
               cheats: *all-cheats
               unity-version: *all-unity-versions
-
+      - publish-package:
+          context:
+            - CLIENT_PACKAGES
+          requires:
+            - commit-validation
+          filters:
+            branches:
+              only: ["master"]
 
 jobs:
  
@@ -269,13 +276,19 @@ executors:
   unity-android-2020:
     docker:
       - image: unityci/editor:ubuntu-2020.3.30f1-android-1.0.1
-
+  unity-android-2021:
+    docker:
+      - image: unityci/editor:ubuntu-2021.3.4f1-android-1.0.1
+        
   unity-ios-2019:
     docker:
       - image: unityci/editor:ubuntu-2019.4.29f1-ios-1.0.1
   unity-ios-2020:
     docker:
       - image: unityci/editor:ubuntu-2020.3.30f1-ios-1.0.1
+  unity-ios-2021:
+    docker:
+      - image: unityci/editor:ubuntu-2021.3.4f1-ios-1.0.1
 
   unity-webgl-2019:
     docker:
@@ -283,3 +296,6 @@ executors:
   unity-webgl-2020:
     docker:
       - image: unityci/editor:ubuntu-2020.3.30f1-webgl-1.0.1
+  unity-webgl-2021:
+    docker:
+      - image: unityci/editor:ubuntu-2021.3.4f1-webgl-1.0.1        
