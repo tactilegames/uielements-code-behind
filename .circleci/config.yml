@@ -12,12 +12,12 @@ all-cheats: &all-cheats [
 ]
 
 all-unity-versions: &all-unity-versions [
-
+2020
 ]
 
 workflows:
   version: 2
-  
+   
   verify-development-commit:
     jobs:
       - commit-validation:
@@ -28,14 +28,7 @@ workflows:
               platform: *all-platforms
               cheats: *all-cheats
               unity-version: *all-unity-versions
-      - publish-package:
-          context:
-            - CLIENT_PACKAGES
-          requires:
-            - commit-validation
-          filters:
-            branches:
-              only: ["master"]
+
 
 jobs:
  
