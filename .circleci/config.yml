@@ -255,8 +255,6 @@ commands:
           name: Set directory to the checked-out project
 
       - run:
-          environment:
-            SLACK_WEBHOOK: https://hooks.slack.com/services/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
           command: |
             export SEMANTIC_RELEASE_PACKAGE=$(eval cat ~/project/package.json | jq -r '.name')
             sudo npm install -g semantic-release
