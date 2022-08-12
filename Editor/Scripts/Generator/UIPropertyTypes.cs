@@ -11,7 +11,9 @@ internal static class UIPropertyTypes
         { "ScrollView", typeof(UnityEngine.UIElements.ScrollView) },
         { "ListView", typeof(UnityEngine.UIElements.ListView) },
         { "IMGUIContainer", typeof(UnityEngine.UIElements.IMGUIContainer) },
+#if UNITY_2021_1_OR_NEWER
         { "GroupBox", typeof(UnityEngine.UIElements.GroupBox) },
+#endif
         // Controls
         { "Label", typeof(UnityEngine.UIElements.Label) },
         { "Button", typeof(UnityEngine.UIElements.Button) },
@@ -22,10 +24,12 @@ internal static class UIPropertyTypes
         { "Slider", typeof(UnityEngine.UIElements.Slider) },
         { "SliderInt", typeof(UnityEngine.UIElements.SliderInt) },
         { "MinMaxSlider", typeof(UnityEngine.UIElements.MinMaxSlider) },
+#if UNITY_2021_1_OR_NEWER
         { "ProgressBar", typeof(UnityEngine.UIElements.ProgressBar) },
         { "DropdownField", typeof(UnityEngine.UIElements.DropdownField) },
         { "RadioButton", typeof(UnityEngine.UIElements.RadioButton) },
         { "RadioButtonGroup", typeof(UnityEngine.UIElements.RadioButtonGroup) },
+#endif
     };
 
     public static Type GetUIElementType(string uiElementName)

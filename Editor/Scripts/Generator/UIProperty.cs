@@ -36,7 +36,7 @@ internal readonly struct UIProperty
         TypeName = type;
         Type = UIPropertyTypes.GetUIElementType(type);
         OriginalName = name;
-        Name = name.Contains('-') ? name.ToPascalCase() : OriginalName;
+        Name = name.Contains("-") ? name.ToPascalCase() : OriginalName;
     }
 }
 
