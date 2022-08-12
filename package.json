@@ -1,7 +1,23 @@
 {
-  "name": "com.tactilegames.uielements-code-behind",
-  "version": "0.0.1",
   "displayName": "UIElements Code Behind",
-  "unity": "2020.3",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/tactilegames/uielements-code-behind.git"
+  },
   "description": "UIElements Code Behind is an UIElements extension tool that generates C# binding scripts based on a UXML template."
+  "name": "com.tactilegames.uielements-code-behind",
+  "author": {
+    "name": "Tactile Games",
+    "url": "https://github.com/tactilegames"
+  },
+  "homepage": "https://github.com/tactilegames/uielements-code-behind",
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/@tactilegames"
+  },
+  "dependencies": {
+    "com.unity.ext.nunit": "1.0.0",
+    "com.unity.test-framework": "1.1.16"
+  },
+  "unity": "2020.3",
+  "version": "0.0.1"
 }
