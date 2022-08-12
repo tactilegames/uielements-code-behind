@@ -12,7 +12,7 @@ all-cheats: &all-cheats [
 ]
 
 all-unity-versions: &all-unity-versions [
-
+2020, 
 ]
 
 workflows:

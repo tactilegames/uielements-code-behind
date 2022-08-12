@@ -2,6 +2,6 @@
   "name": "com.tactilegames.uielements-code-behind",
   "version": "0.0.1",
   "displayName": "UIElements Code Behind",
-  "unity": "2021.3",
+  "unity": "2020.3",
   "description": "UIElements Code Behind is an UIElements extension tool that generates C# binding scripts based on a UXML template."
 }
