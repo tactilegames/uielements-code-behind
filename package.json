@@ -4,7 +4,7 @@
     "type": "git",
     "url": "https://github.com/tactilegames/uielements-code-behind.git"
   },
-  "description": "UIElements Code Behind is an UIElements extension tool that generates C# binding scripts based on a UXML template."
+  "description": "UIElements Code Behind is an UIElements extension tool that generates C# binding scripts based on a UXML template.",
   "name": "com.tactilegames.uielements-code-behind",
   "author": {
     "name": "Tactile Games",
