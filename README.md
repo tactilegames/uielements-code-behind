@@ -1,8 +1,6 @@
-# Rosalina
+# com.tactilegames.uielements-code-behind
 
-[![openupm](https://img.shields.io/npm/v/com.eastylabs.rosalina?label=openupm&registry_uri=https://package.openupm.com)](https://openupm.com/packages/com.eastylabs.rosalina/)
-
-Rosalina is a code generation tool for Unity's UI documents. It allows developers to generate C# UI bindings and
+UIElements Code Behind is a code generation tool for Unity's UI documents. It allows developers to generate C# UI bindings and
 code-behind scripts based on a UXML template.
 
 ## How to install

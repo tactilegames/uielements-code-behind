@@ -45,6 +45,6 @@ public class RosalinaAssetProcessor : AssetPostprocessor
         }
     }
 
-    private static int GeneratePercentage(int value, int total) => Math.Clamp((value / total) * 100, 0, 100);
+    private static int GeneratePercentage(int value, int total) => Mathf.Clamp((value / total) * 100, 0, 100);
 }
 #endif
