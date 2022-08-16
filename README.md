@@ -1,6 +1,6 @@
 # com.tactilegames.uielements-code-behind
 
-UIElements Code Behind is a code generation tool for Unity's UI documents. It allows developers to generate C# UI bindings and
+UIElements Code Behind is a code generation tool for Unity's UI toolkit. It allows developers to generate C# UI bindings and
 code-behind scripts based on a UXML template.
 
 ## Usage
