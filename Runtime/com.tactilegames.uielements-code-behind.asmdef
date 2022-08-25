@@ -1,0 +1,13 @@
+{
+    "overrideReferences": false,
+    "noEngineReferences": false,
+    "autoReferenced": true,
+    "name": "com.tactilegames.uielements-code-behind",
+    "allowUnsafeContext": false,
+    "defineConstraints": [],
+    "optionalUnityReferences": [],
+    "includePlatforms": [],
+    "references": [],
+    "excludePlatforms": [],
+    "precompiledReferences": []
+}

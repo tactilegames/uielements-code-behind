@@ -1,0 +1,19 @@
+{
+    "overrideReferences": true,
+    "noEngineReferences": false,
+    "autoReferenced": true,
+    "name": "com.tactilegames.uielements-code-behind.editor",
+    "allowUnsafeContext": false,
+    "defineConstraints": [],
+    "optionalUnityReferences": [],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "references": [
+        "com.tactilegames.uielements-code-behind"
+    ],
+    "excludePlatforms": [],
+    "precompiledReferences": [
+        "Rosalina.RoslynLibrary.dll"
+    ]
+}

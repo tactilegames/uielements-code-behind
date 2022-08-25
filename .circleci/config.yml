@@ -1,0 +1,290 @@
+version: 2.1
+
+all-platforms: &all-platforms [
+  'android',
+  'ios',
+  'webgl'
+]
+
+all-cheats: &all-cheats [
+  'TACTILE_CHEATS',
+  'TACTILE_NO_CHEATS',
+]
+
+all-unity-versions: &all-unity-versions [
+2020, 
+]
+
+workflows:
+  version: 2
+  
+  verify-development-commit:
+    jobs:
+      - commit-validation:
+          context:
+            - CLIENT_PACKAGES
+          matrix:
+            parameters:
+              platform: *all-platforms
+              cheats: *all-cheats
+              unity-version: *all-unity-versions
+      - publish-package:
+          context:
+            - CLIENT_PACKAGES
+          requires:
+            - commit-validation
+          filters:
+            branches:
+              only: ["master"]
+
+jobs:
+ 
+  commit-validation:
+    executor: unity-ios-<<parameters.unity-version>>
+
+    parameters:
+      platform:
+        default: "android"
+        type: string
+      cheats:
+        default: "TACTILE_CHEATS"
+        type: string
+      unity-version:
+        default: 2019
+        type: integer
+
+    steps:
+      - prepare-unity-for-execution
+
+      - compile-unity:
+          platform: <<parameters.platform>>
+          cheats: <<parameters.cheats>>
+          unity-version: <<parameters.unity-version>>
+
+      - run-validation:
+          platform: ios
+          cheats: TACTILE_CHEATS
+
+      - run-unit-tests:
+          platform: ios
+          cheats: TACTILE_CHEATS
+
+      - store_artifacts:
+          path: /root/test-results/nunit/results.xml
+          destination: nunit-results.xml
+
+      - store_artifacts:
+          path: /root/test-results/junit/results.xml
+          destination: junit-results.xml
+
+      - store_test_results:
+          path: /root/test-results
+
+  publish-package:
+    docker:
+      - image: cimg/node:16.13.2
+    steps:
+      - checkout
+      - publish-package
+
+commands:
+  
+  prepare-unity-for-execution:
+    steps:
+      - checkout
+
+      - setup-environment
+
+      - hook-up-module-dependency
+
+      - set-npm-token
+
+      - set-unity-license
+  
+  setup-environment:
+    steps:
+      - run:
+          command: |
+            apt-get update -y
+            apt-get install -y xalan jq
+          name: Install JQ
+
+      - run:
+          command: mkdir -p /root/unity_project
+          name: Create Unity project directory
+
+      - run:
+          command: git clone --single-branch --branch $UNITY_VERSION "https://x-oauth-token:$GITHUB_OAUTH_TOKEN@github.com/tactilegames/Unity-CircleCI.git" /root/unity_project
+          name: Checkout template Unity project
+
+    description: Sets up the environment
+
+  hook-up-module-dependency:
+    steps:
+      - run:
+          command: |
+            PACKAGE_NAME=$(eval cat ~/project/package.json | jq '.name')
+            echo 'Package Name = '$PACKAGE_NAME
+            jq --arg PACKAGE_NAME "$PACKAGE_NAME" '.dependencies +={ '$PACKAGE_NAME' : "file:../../project"}' /root/unity_project/Packages/manifest.json > /root/unity_project/Packages/manifest_modified.json
+            jq --arg PACKAGE_NAME "$PACKAGE_NAME" '.testables +=[ '$PACKAGE_NAME' ]' /root/unity_project/Packages/manifest_modified.json > /root/unity_project/Packages/manifest_modified2.json
+            rm /root/unity_project/Packages/manifest.json && mv /root/unity_project/Packages/manifest_modified2.json /root/unity_project/Packages/manifest.json
+            cat /root/unity_project/Packages/manifest.json
+          name: Install current package as file reference
+
+    description: Sets up a file dependency on the current module, so it and its dependencies get imported by Unity
+  
+  set-npm-token:
+    steps:
+      - run:
+          command: |
+            echo -e "[npmAuth.\"https://npm.pkg.github.com/@tactilegames\"]\ntoken = \"$GITHUB_OAUTH_TOKEN\"\nalwaysAuth = true" > ~/.upmconfig.toml
+            cat ~/.upmconfig.toml
+          name: Set npm token for Unity to fetch packages with
+    description: Sets the NPM config so unity can pull packages
+
+  set-unity-license:
+    steps:
+      - run:
+          command: echo $UNITY_LICENSE_2019X | base64 --decode > license.ulf
+          name: Create unity license file
+
+      - run:
+          command: >
+            xvfb-run --auto-servernum --server-args='-screen 0 640x480x24'
+            /opt/unity/Editor/Unity -quit -batchmode -nographics -silent-crashes -logFile /dev/stdout -manualLicenseFile license.ulf || exit 0
+          name: Activate license in Unity
+
+    description:  Generated a license file for unity, and launches unity to activate the license
+
+  compile-unity:
+    parameters:
+      platform:
+        default: "android"
+        type: string
+      cheats:
+        default: "TACTILE_CHEATS"
+        type: string
+      unity-version:
+        default: 2019
+        type: integer
+    steps:
+      - run:
+          command: |
+            rm -f /root/unity_project/Assets/csc.rsp
+            echo "-define:"<< parameters.cheats >> >> /root/unity_project/Assets/csc.rsp
+          name: Setup csc.rsp file for unity to compile for the right build type
+
+      - run:
+          command: >
+            xvfb-run --auto-servernum --server-args='-screen 0 640x480x24'
+            /opt/unity/Editor/Unity -batchmode -projectPath /root/unity_project -buildTarget << parameters.platform >> -logFile /dev/stdout -nographics -silent-crashes -quit
+          name: Compile unity
+
+  run-unit-tests:
+    parameters:
+      platform:
+        default: "android"
+        type: string
+      cheats:
+        default: "TACTILE_CHEATS"
+        type: string
+      unity-version:
+        default: 2019
+        type: integer
+    steps:
+      - run:
+          command: |
+            mkdir -p /root/test-results/junit
+            mkdir -p /root/test-results/nunit
+          name: Create test result directories
+
+      - run:
+          command: |
+            rm -f /root/unity_project/Assets/csc.rsp
+            echo "-define:"<< parameters.cheats >> >> /root/unity_project/Assets/csc.rsp
+          name: Setup csc.rsp file for unity to compile for the right build type
+
+      - run:
+          command: wget -O /root/nunit3-junit.xslt https://raw.githubusercontent.com/nunit/nunit-transforms/master/nunit3-junit/nunit3-junit.xslt
+          name: Install nunit to junit converter
+
+      - run:
+          command: |
+            xvfb-run --auto-servernum --server-args='-screen 0 640x480x24' /opt/unity/Editor/Unity -batchmode -nographics -silent-crashes -logFile /dev/stdout -runEditorTests -editorTestsResultFile /root/test-results/nunit/results.xml -projectPath /root/unity_project -buildTarget << parameters.platform >> || true
+            xalan -xsl /root/nunit3-junit.xslt -in /root/test-results/nunit/results.xml -out /root/test-results/junit/results.xml
+            xvfb-run --auto-servernum --server-args='-screen 0 640x480x24' /opt/unity/Editor/Unity -batchmode -nographics -silent-crashes -logFile /dev/stdout -runEditorTests -editorTestsResultFile /root/test-results/nunit/results.xml -projectPath /root/unity_project -buildTarget << parameters.platform >>
+          name: Run unit tests in Unity, then convert resulting nunit result to junit format
+    description: Runs the unit tests, and then converts the results into a jUnit format
+
+  run-validation:
+    parameters:
+      platform:
+        default: "android"
+        type: string
+      cheats:
+        default: "TACTILE_CHEATS"
+        type: string
+      unity-version:
+        default: 2019
+        type: integer
+    steps:
+      - run:
+          command: |
+            rm -f /root/unity_project/Assets/csc.rsp
+            echo "-define:"<< parameters.cheats >> >> /root/unity_project/Assets/csc.rsp
+          name: Setup csc.rsp file for unity to compile for the right build type
+
+      - run:
+          command: >
+            xvfb-run --auto-servernum --server-args='-screen 0 640x480x24'
+            /opt/unity/Editor/Unity -batchmode -projectPath /root/unity_project -buildTarget << parameters.platform >> -logFile /dev/stdout -nographics -silent-crashes -quit -executeMethod ValidationBridge.RunProjectValidation
+          name: Run validation in Unity
+
+  publish-package:
+    steps:
+      - checkout
+
+      - run:
+          command: |
+            echo //npm.pkg.github.com/:_authToken=$GITHUB_OAUTH_TOKEN > ~/project/.npmrc
+            echo @tactilegames:registry=https://npm.pkg.github.com >> ~/project/.npmrc
+          name: Create configuration file for NPM to publish packages with
+
+      - run:
+          command: cd ~/project
+          name: Set directory to the checked-out project
+
+      - run:
+          command: |
+            export SEMANTIC_RELEASE_PACKAGE=$(eval cat ~/project/package.json | jq -r '.name')
+            sudo npm install -g semantic-release
+            sudo npm install -g @semantic-release/changelog
+            sudo npm install -g @tactilegames/semantic-pr-changelog
+            sudo npm install -g @semantic-release/git
+            sudo npm install -g @semantic-release/npm
+            sudo npm install -g conventional-changelog-conventionalcommits@4
+            sudo npm install -g semantic-release-slack-bot
+            GITHUB_TOKEN=$GITHUB_OAUTH_TOKEN semantic-release --no-ci
+          name: Install and run semantic-release
+
+executors:
+  unity-android-2019:
+    docker:
+      - image: unityci/editor:ubuntu-2019.4.29f1-android-1.0.1
+  unity-android-2020:
+    docker:
+      - image: unityci/editor:ubuntu-2020.3.30f1-android-1.0.1
+
+  unity-ios-2019:
+    docker:
+      - image: unityci/editor:ubuntu-2019.4.29f1-ios-1.0.1
+  unity-ios-2020:
+    docker:
+      - image: unityci/editor:ubuntu-2020.3.30f1-ios-1.0.1
+
+  unity-webgl-2019:
+    docker:
+      - image: unityci/editor:ubuntu-2019.4.29f1-webgl-1.0.1  
+  unity-webgl-2020:
+    docker:
+      - image: unityci/editor:ubuntu-2020.3.30f1-webgl-1.0.1
