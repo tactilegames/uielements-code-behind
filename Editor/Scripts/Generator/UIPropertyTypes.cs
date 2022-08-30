@@ -29,6 +29,7 @@ internal static class UIPropertyTypes
         { "DropdownField", typeof(UnityEngine.UIElements.DropdownField) },
         { "RadioButton", typeof(UnityEngine.UIElements.RadioButton) },
         { "RadioButtonGroup", typeof(UnityEngine.UIElements.RadioButtonGroup) },
+        { "Image", typeof(UnityEngine.UIElements.Image) },
 #endif
     };
 
