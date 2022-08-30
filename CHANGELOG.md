@@ -1,5 +1,14 @@
 # com.tactilegames.uielements-code-behind
 
+## [1.3.0](https://github.com/tactilegames/uielements-code-behind/compare/v1.2.0...v1.3.0) (2022-08-30)
+
+### Feature
+
+Sync fork with origin ([#2](https://github.com/tactilegames/uielements-code-behind/pull/2))  [Trond Glomnes](https://github.com/trondtactile)
+
+#### Description
+Synced fork with origin. Pulled in support for UIToolkit.Image.
+
 ## [1.2.0](https://github.com/tactilegames/uielements-code-behind/compare/v1.1.0...v1.2.0) (2022-08-16)
 
 ### Feature
