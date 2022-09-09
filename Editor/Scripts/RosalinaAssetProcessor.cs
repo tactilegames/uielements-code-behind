@@ -12,7 +12,7 @@ public class RosalinaAssetProcessor : AssetPostprocessor
     private static void OnPostprocessAllAssets(string[] importedAssets, string[] deletedAssets, string[] movedAssets, string[] movedFromPath)
     {
         string[] uiFilesChanged = importedAssets
-            .Where(x => x.StartsWith("Assets"))
+            .Where(x => x.StartsWith("Assets") || x.StartsWith("Packages"))
             .Where(x => Path.GetExtension(x) == UIDocumentExtension)
             .ToArray();
 
