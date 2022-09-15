@@ -1,5 +1,16 @@
 # com.tactilegames.uielements-code-behind
 
+## [1.3.1](https://github.com/tactilegames/uielements-code-behind/compare/v1.3.0...v1.3.1) (2022-09-15)
+
+### Bug Fix
+
+Now also generates code-behind for packages ([#3](https://github.com/tactilegames/uielements-code-behind/pull/3))  [Trond Glomnes](https://github.com/trondtactile)
+
+#### Description
+Now also generates code-behind for packages.
+
+Previously everything was anything not in the "assets" folder was filtered out.
+
 ## [1.3.0](https://github.com/tactilegames/uielements-code-behind/compare/v1.2.0...v1.3.0) (2022-08-30)
 
 ### Feature
