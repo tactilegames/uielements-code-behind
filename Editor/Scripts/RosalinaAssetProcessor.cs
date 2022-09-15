@@ -2,7 +2,9 @@
 using System;
 using System.IO;
 using System.Linq;
+using Rosalina;
 using UnityEditor;
+using UnityEditor.PackageManager;
 using UnityEngine;
 
 public class RosalinaAssetProcessor : AssetPostprocessor
@@ -12,7 +14,7 @@ public class RosalinaAssetProcessor : AssetPostprocessor
     private static void OnPostprocessAllAssets(string[] importedAssets, string[] deletedAssets, string[] movedAssets, string[] movedFromPath)
     {
         string[] uiFilesChanged = importedAssets
-            .Where(x => x.StartsWith("Assets"))
+            .Where(x => x.StartsWith("Assets") || x.StartsWith("Packages"))
             .Where(x => Path.GetExtension(x) == UIDocumentExtension)
             .ToArray();
 
@@ -21,6 +23,14 @@ public class RosalinaAssetProcessor : AssetPostprocessor
             for (int i = 0; i < uiFilesChanged.Length; i++)
             {
                 string uiDocumentPath = uiFilesChanged[i];
+
+                if (PackageSupport.IsFileInPackage(uiDocumentPath)) {
+                    if (!PackageSupport.IsPackageEmbedded(uiDocumentPath)) {
+                        continue;
+                    }
+                }
+               
+
                 var document = new UIDocumentAsset(uiDocumentPath);
 
                 try
