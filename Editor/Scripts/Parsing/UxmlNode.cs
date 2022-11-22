@@ -19,6 +19,16 @@ internal class UxmlNode
     /// Gets a boolean value that indicates if the current UXML node is the root node.
     /// </summary>
     public bool IsRoot { get; }
+    
+    /// <summary>
+    /// Should code behind generation take place for this UXML document.
+    /// </summary>
+    public bool GenerateCodeBehind { get; set; }
+    
+    /// <summary>
+    /// What namespace should the code behind be generated under.
+    /// </summary>
+    public string Namespace { get; set; }
 
     /// <summary>
     /// Gets the UXML child nodes.

@@ -48,6 +48,9 @@ internal class RosalinaBindingsGenerator
         }
 
         UxmlDocument uxmlDocument = RosalinaUXMLParser.ParseUIDocument(document.FullPath);
+        if (!uxmlDocument.RootNode.GenerateCodeBehind) {
+            return new RosalinaGenerationResult(null, null);
+        }
         
         MemberDeclarationSyntax visualElementRootProperty = CreateVisualElementRootProperty();
         InitializationStatement[] statements = GenerateInitializeStatements(uxmlDocument);
@@ -66,10 +69,23 @@ internal class RosalinaBindingsGenerator
             .AddModifiers(SyntaxFactory.Token(SyntaxKind.PartialKeyword))
             .AddMembers(classMembers);
 
-        CompilationUnitSyntax compilationUnit = SyntaxFactory.CompilationUnit()
-            .AddUsings(DefaultUsings)
-            .AddMembers(@class);
 
+        NamespaceDeclarationSyntax @namespace = null;
+        if (!string.IsNullOrWhiteSpace(uxmlDocument.RootNode.Namespace)) {
+            @namespace = SyntaxFactory.NamespaceDeclaration(SyntaxFactory.ParseName(uxmlDocument.RootNode.Namespace))
+                .NormalizeWhitespace().AddMembers(@class);
+        }
+
+
+        CompilationUnitSyntax compilationUnit = SyntaxFactory.CompilationUnit()
+            .AddUsings(DefaultUsings);
+
+        if (@namespace != null) {
+            compilationUnit = compilationUnit.AddMembers(@namespace);
+        } else {
+            compilationUnit = compilationUnit.AddMembers(@class);
+        }
+        
         string code = compilationUnit
             .NormalizeWhitespace()
             .ToFullString();
@@ -147,7 +163,7 @@ internal class RosalinaBindingsGenerator
                 continue;
             }
 
-            PropertyDeclarationSyntax @property = RosalinaSyntaxFactory.CreateProperty(uiProperty.Type.Name, uiProperty.Name, SyntaxKind.PublicKeyword)
+            PropertyDeclarationSyntax @property = RosalinaSyntaxFactory.CreateProperty(uiProperty.Type.FullName, uiProperty.Name, SyntaxKind.PublicKeyword)
                 .AddAccessorListAccessors(
                     SyntaxFactory.AccessorDeclaration(SyntaxKind.GetAccessorDeclaration)
                         .WithSemicolonToken(SyntaxFactory.Token(SyntaxKind.SemicolonToken))
@@ -168,7 +184,7 @@ internal class RosalinaBindingsGenerator
                 )
             });
             var cast = SyntaxFactory.CastExpression(
-                SyntaxFactory.ParseTypeName(uiProperty.Type.Name),
+                SyntaxFactory.ParseTypeName(uiProperty.Type.FullName),
                 SyntaxFactory.InvocationExpression(documentQueryMethodAccess, SyntaxFactory.ArgumentList(argumentList))
             );
             var statement = SyntaxFactory.ExpressionStatement(

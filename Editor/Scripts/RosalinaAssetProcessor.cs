@@ -39,6 +39,10 @@ public class RosalinaAssetProcessor : AssetPostprocessor
                     Debug.Log($"[Rosalina]: Generating UI bindings for {uiDocumentPath}");
 
                     RosalinaGenerationResult result = RosalinaGenerator.GenerateBindings(document, $"{document.Name}.g.cs");
+                    if (result.Code == null) {
+                        Debug.Log($"[Rosalina]: Skipping: {document.Name}");
+                        continue;
+                    }
                     result.Save();
 
                     Debug.Log($"[Rosalina]: Done generating: {document.Name} (output: {result.OutputFilePath})");

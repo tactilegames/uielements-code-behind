@@ -4,6 +4,10 @@ UIElements Code Behind is a code generation tool for Unity's UI toolkit. It allo
 code-behind scripts based on a UXML template.
 
 ## Usage
+In your UXML, add the attribute `tactile-code-behind="true"` to the root node to enable code behind generation. 
+
+Optionally, add the attribute `tactile-namespace="MY_NAMESPACE"` to the root node to set what namespace the generated code should end up in.
+
 Create a public partial class with the same name as the UI document. Whenever the UI is about to show, call the `InitializeBinding` method in the generated partial class, and pass in the root `VisualElement` of the UI you want to show. 
 
 In order to get a hold of the root `VisualElement`, call `Instantiate` on your `VisualTreeAsset`, which is like the "prefab" for an UI document.
