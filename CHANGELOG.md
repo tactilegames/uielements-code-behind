@@ -1,5 +1,21 @@
 # com.tactilegames.uielements-code-behind
 
+## [1.4.0](https://github.com/tactilegames/uielements-code-behind/compare/v1.3.1...v1.4.0) (2022-12-09)
+
+### Feature
+
+General improvements  ([#4](https://github.com/tactilegames/uielements-code-behind/pull/4))  [Trond Glomnes](https://github.com/trondtactile)
+
+#### Description
+Introduced 2 new root node attributes:
+* `tactile-code-behind`: Only UXML documents with this attribute on the root node will have code behind generated
+* `tactile-namespace`: Selects the namespace to generate the code behind in
+
+`UIPropertyTypes` is no longer a dictionary of names->types. Instead, we cache a list of all types inheriting `ITransform` using `TypeCache`. This means all Unity and custom UIElement types will work going forwards.
+
+#### Actions
+> Any UXML with code behind already generated needs to use the new attribute in order to continue generating.
+
 ## [1.3.1](https://github.com/tactilegames/uielements-code-behind/compare/v1.3.0...v1.3.1) (2022-09-15)
 
 ### Bug Fix
