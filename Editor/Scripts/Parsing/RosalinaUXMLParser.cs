@@ -5,6 +5,8 @@ using System.Xml.Linq;
 internal class RosalinaUXMLParser
 {
     private const string NameAttribute = "name";
+    private const string GENERATE_CODE_BEHIND = "tactile-code-behind";
+    private const string GENERATED_NAMESPACE = "tactile-namespace";
 
     /// <summary>
     /// Parses the given UI document path.
@@ -25,6 +27,11 @@ internal class RosalinaUXMLParser
         string type = xmlNode.Name.LocalName;
         string name = xmlNode.Attribute(NameAttribute)?.Value ?? string.Empty;
         var node = new UxmlNode(type, name, xmlNode.Parent is null);
+
+        if (node.IsRoot) {
+            node.GenerateCodeBehind = xmlNode.Attribute(XName.Get(GENERATE_CODE_BEHIND)) != null;
+            node.Namespace = xmlNode.Attribute(XName.Get(GENERATED_NAMESPACE))?.Value;
+        }
 
         if (xmlNode.HasElements)
         {
