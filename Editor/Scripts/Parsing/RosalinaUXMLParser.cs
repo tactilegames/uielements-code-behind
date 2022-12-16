@@ -31,8 +31,10 @@ internal class RosalinaUXMLParser
         if (node.IsRoot) {
             node.GenerateCodeBehind = xmlNode.Attribute(XName.Get(GENERATE_CODE_BEHIND)) != null;
             node.Namespace = xmlNode.Attribute(XName.Get(GENERATED_NAMESPACE))?.Value;
+        } else {
+            node.Namespace = xmlNode.Name.NamespaceName;
         }
-
+        
         if (xmlNode.HasElements)
         {
             foreach (XElement xmlElement in xmlNode.Elements())
