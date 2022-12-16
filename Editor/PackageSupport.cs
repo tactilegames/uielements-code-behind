@@ -2,7 +2,7 @@
 using System.Linq;
 using UnityEditor.PackageManager;
 
-namespace Rosalina {
+namespace TactileModules.UIElementsCodeBehind {
 
 	public static class PackageSupport {
 

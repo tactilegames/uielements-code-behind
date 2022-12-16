@@ -4,7 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 
-namespace Rosalina.Generator {
+namespace TactileModules.UIElementsCodeBehind {
 
 	public class CodeGenerator {
 
@@ -20,7 +20,7 @@ namespace Rosalina.Generator {
 				throw new ArgumentException("An output file name is required.", nameof(outputPath));
 			}
 			
-			var uxml = RosalinaUXMLParser.ParseUIDocument(uiDocumentAsset.FullPath);
+			var uxml = RosalinaUxmlParser.ParseUIDocument(uiDocumentAsset.FullPath);
 			if (!uxml.RootNode.GenerateCodeBehind) {
 				return new RosalinaGenerationResult(null, null);
 			}

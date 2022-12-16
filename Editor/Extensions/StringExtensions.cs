@@ -1,9 +1,7 @@
-﻿#if UNITY_EDITOR
-
-using System;
+﻿using System;
 using System.Linq;
 
-namespace Rosalina.Extensions
+namespace TactileModules.UIElementsCodeBehind
 {
     internal static class StringExtensions
     {
@@ -17,5 +15,3 @@ namespace Rosalina.Extensions
         }
     }
 }
-
-#endif

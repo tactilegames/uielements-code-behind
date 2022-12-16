@@ -1,36 +1,36 @@
-#if UNITY_EDITOR
 using System;
 using System.IO;
 using System.Linq;
-using Rosalina;
 using UnityEditor;
-using UnityEditor.PackageManager;
 using UnityEngine;
 
-public class RosalinaAssetProcessor : AssetPostprocessor
-{
-    private const string UIDocumentExtension = ".uxml";
+namespace TactileModules.UIElementsCodeBehind {
 
-    private static void OnPostprocessAllAssets(string[] importedAssets, string[] deletedAssets, string[] movedAssets, string[] movedFromPath)
+    public class RosalinaAssetProcessor : AssetPostprocessor
     {
-        string[] uiFilesChanged = importedAssets
-            .Where(x => x.StartsWith("Assets") || x.StartsWith("Packages"))
-            .Where(x => Path.GetExtension(x) == UIDocumentExtension)
-            .ToArray();
+        private const string UI_DOCUMENT_EXTENSION = ".uxml";
 
-        if (uiFilesChanged.Length > 0)
+        private static void OnPostprocessAllAssets(string[] importedAssets, string[] deletedAssets, string[] movedAssets, string[] movedFromPath)
         {
-            for (int i = 0; i < uiFilesChanged.Length; i++)
+            var uiFilesChanged = importedAssets
+                .Where(x => x.StartsWith("Assets") || x.StartsWith("Packages"))
+                .Where(x => Path.GetExtension(x) == UI_DOCUMENT_EXTENSION)
+                .ToArray();
+
+            if (uiFilesChanged.Length <= 0) {
+                return;
+            }
+
+            for (var i = 0; i < uiFilesChanged.Length; i++)
             {
-                string uiDocumentPath = uiFilesChanged[i];
+                var uiDocumentPath = uiFilesChanged[i];
 
                 if (PackageSupport.IsFileInPackage(uiDocumentPath)) {
                     if (!PackageSupport.IsPackageEmbedded(uiDocumentPath)) {
                         continue;
                     }
                 }
-               
-
+            
                 var document = new UIDocumentAsset(uiDocumentPath);
 
                 try
@@ -38,7 +38,7 @@ public class RosalinaAssetProcessor : AssetPostprocessor
                     EditorUtility.DisplayProgressBar("Rosalina", $"Generating {document.Name} bindings...", GeneratePercentage(i, uiFilesChanged.Length));
                     Debug.Log($"[Rosalina]: Generating UI bindings for {uiDocumentPath}");
 
-                    RosalinaGenerationResult result = RosalinaGenerator.GenerateBindings(document, $"{document.Name}.g.cs");
+                    var result = RosalinaGenerator.GenerateBindings(document, $"{document.Name}.g.cs");
                     if (result.Code == null) {
                         Debug.Log($"[Rosalina]: Skipping: {document.Name}");
                         continue;
@@ -53,12 +53,12 @@ public class RosalinaAssetProcessor : AssetPostprocessor
                 }
             }
 
-            Debug.Log($"[Rosalina]: Done.");
+            Debug.Log("[Rosalina]: Done.");
             EditorUtility.ClearProgressBar();
             AssetDatabase.Refresh();
         }
+
+        private static int GeneratePercentage(int value, int total) => Mathf.Clamp((value / total) * 100, 0, 100);
     }
 
-    private static int GeneratePercentage(int value, int total) => Mathf.Clamp((value / total) * 100, 0, 100);
 }
-#endif
