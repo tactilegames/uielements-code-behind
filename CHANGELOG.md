@@ -1,5 +1,16 @@
 # com.tactilegames.uielements-code-behind
 
+## [1.5.0](https://github.com/tactilegames/uielements-code-behind/compare/v1.4.0...v1.5.0) (2022-12-21)
+
+### Refactoring
+
+Do not use Roslyn ([#5](https://github.com/tactilegames/uielements-code-behind/pull/5))  [Trond Glomnes](https://github.com/trondtactile)
+
+#### Description
+Refactored code generator to no longer uses Roslyn. 
+
+The reason for this is that Roslyn imports certain Span<> based types, which crashes all our type lookups, including type lookups from external SDKs such as Facebook.
+
 ## [1.4.0](https://github.com/tactilegames/uielements-code-behind/compare/v1.3.1...v1.4.0) (2022-12-09)
 
 ### Feature
