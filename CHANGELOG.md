@@ -1,5 +1,18 @@
 # com.tactilegames.uielements-code-behind
 
+## [1.5.1](https://github.com/tactilegames/uielements-code-behind/compare/v1.5.0...v1.5.1) (2022-12-22)
+
+### Bug Fix
+
+Fixed compiler error due to missing meta file ([#6](https://github.com/tactilegames/uielements-code-behind/pull/6))  [Trond Glomnes](https://github.com/trondtactile)
+
+#### Description
+Fixed compiler error due to missing meta file.
+
+This passed the CI due to the fact that the way Unity imports the package in the CI, leaves the package mutable. However, when real projects import this package, it's immutable. 
+
+So in other words, the CI was allowed to generate the missing meta file and import the class. Real projects were not allowed to generate the meta file, and therefore did not import the class, causing a compiler error.
+
 ## [1.5.0](https://github.com/tactilegames/uielements-code-behind/compare/v1.4.0...v1.5.0) (2022-12-21)
 
 ### Refactoring
