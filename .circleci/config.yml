@@ -257,13 +257,13 @@ commands:
       - run:
           command: |
             export SEMANTIC_RELEASE_PACKAGE=$(eval cat ~/project/package.json | jq -r '.name')
-            sudo npm install -g semantic-release
-            sudo npm install -g @semantic-release/changelog
+            sudo npm install -g semantic-release@19.x
+            sudo npm install -g @semantic-release/changelog@6.0.2
             sudo npm install -g @tactilegames/semantic-pr-changelog
-            sudo npm install -g @semantic-release/git
-            sudo npm install -g @semantic-release/npm
+            sudo npm install -g @semantic-release/git@10.0.1
+            sudo npm install -g @semantic-release/npm@9.0.2
             sudo npm install -g conventional-changelog-conventionalcommits@4
-            sudo npm install -g semantic-release-slack-bot
+            sudo npm install -g semantic-release-slack-bot@3.5.3
             GITHUB_TOKEN=$GITHUB_OAUTH_TOKEN semantic-release --no-ci
           name: Install and run semantic-release
 
