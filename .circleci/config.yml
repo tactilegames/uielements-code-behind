@@ -2,8 +2,7 @@ version: 2.1
 
 all-platforms: &all-platforms [
   'android',
-  'ios',
-  'webgl'
+  'ios'
 ]
 
 all-cheats: &all-cheats [
@@ -50,7 +49,7 @@ jobs:
         default: "TACTILE_CHEATS"
         type: string
       unity-version:
-        default: 2019
+        default: 2020
         type: integer
 
     steps:
@@ -165,7 +164,7 @@ commands:
         default: "TACTILE_CHEATS"
         type: string
       unity-version:
-        default: 2019
+        default: 2020
         type: integer
     steps:
       - run:
@@ -189,7 +188,7 @@ commands:
         default: "TACTILE_CHEATS"
         type: string
       unity-version:
-        default: 2019
+        default: 2020
         type: integer
     steps:
       - run:
@@ -225,7 +224,7 @@ commands:
         default: "TACTILE_CHEATS"
         type: string
       unity-version:
-        default: 2019
+        default: 2020
         type: integer
     steps:
       - run:
@@ -268,32 +267,16 @@ commands:
           name: Install and run semantic-release
 
 executors:
-  unity-android-2019:
-    docker:
-      - image: unityci/editor:ubuntu-2019.4.29f1-android-1.0.1
   unity-android-2020:
     docker:
       - image: unityci/editor:ubuntu-2020.3.30f1-android-1.0.1
   unity-android-2021:
     docker:
       - image: unityci/editor:ubuntu-2021.3.16f1-android-1.0.1
-
-  unity-ios-2019:
-    docker:
-      - image: unityci/editor:ubuntu-2019.4.29f1-ios-1.0.1
+      
   unity-ios-2020:
     docker:
       - image: unityci/editor:ubuntu-2020.3.30f1-ios-1.0.1
   unity-ios-2021:
     docker:
       - image: unityci/editor:ubuntu-2021.3.16f1-ios-1.0.1
-
-  unity-webgl-2019:
-    docker:
-      - image: unityci/editor:ubuntu-2019.4.29f1-webgl-1.0.1  
-  unity-webgl-2020:
-    docker:
-      - image: unityci/editor:ubuntu-2020.3.30f1-webgl-1.0.1
-  unity-webgl-2021:
-    docker:
-      - image: unityci/editor:ubuntu-2021.3.16f1-webgl-1.0.1
