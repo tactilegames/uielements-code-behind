@@ -85,7 +85,8 @@ jobs:
     steps:
       - checkout
       - publish-package
-
+    resource_class: small
+    
 commands:
   
   prepare-unity-for-execution:
@@ -270,13 +271,16 @@ executors:
   unity-android-2020:
     docker:
       - image: unityci/editor:ubuntu-2020.3.30f1-android-1.0.1
+    resource_class: small
   unity-android-2021:
     docker:
       - image: unityci/editor:ubuntu-2021.3.16f1-android-1.0.1
-      
+    resource_class: small
   unity-ios-2020:
     docker:
       - image: unityci/editor:ubuntu-2020.3.30f1-ios-1.0.1
+    resource_class: small
   unity-ios-2021:
     docker:
       - image: unityci/editor:ubuntu-2021.3.16f1-ios-1.0.1
+    resource_class: small
