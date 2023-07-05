@@ -1,5 +1,14 @@
 # com.tactilegames.uielements-code-behind
 
+## [1.5.2](https://github.com/tactilegames/uielements-code-behind/compare/v1.5.1...v1.5.2) (2023-07-05)
+
+### Bug Fix
+
+Update property assignment in CodeGenerator ([#7](https://github.com/tactilegames/uielements-code-behind/pull/7))  [Trond Glomnes](https://github.com/trondtactile)
+
+#### Description
+Fixed an issue where we did not use the correct property for generating the binding code. We used the Property name instead of the original name of the uxml. This caused the binding to fail.
+
 ## [1.5.1](https://github.com/tactilegames/uielements-code-behind/compare/v1.5.0...v1.5.1) (2022-12-22)
 
 ### Bug Fix
