@@ -6,7 +6,10 @@ code-behind scripts based on a UXML template.
 ## Usage
 In your UXML, add the attribute `tactile-code-behind="true"` to the root node to enable code behind generation. 
 
-Optionally, add the attribute `tactile-namespace="MY_NAMESPACE"` to the root node to set what namespace the generated code should end up in.
+You have the following options to configure the code generation:
+* `tactile-namespace="MY_NAMESPACE"`: Set the namespace of the generated code. Defaults to no namespace.
+* `tactile-resource-path="MY_RESOURCE_PATH"`: If set, the generated code will load the UXML from the specified path, and initialize the visual element itself. Else, the generated code will only initialize the binding, and you will have to clone the `VisualTree` yourself.
+* `tactile-stylesheet-path="MY_STYLESHEET_PATH"`: If set, the generated code will load the USS from the specified path, and apply it to the root visual element. This can be a comma-separated list of paths.
 
 Create a public partial class with the same name as the UI document. Whenever the UI is about to show, call the `InitializeBinding` method in the generated partial class, and pass in the root `VisualElement` of the UI you want to show. 
 

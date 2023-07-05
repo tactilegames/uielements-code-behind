@@ -8,6 +8,8 @@ namespace TactileModules.UIElementsCodeBehind {
         private const string NAME_ATTRIBUTE = "name";
         private const string GENERATE_CODE_BEHIND = "tactile-code-behind";
         private const string GENERATED_NAMESPACE = "tactile-namespace";
+        private const string RESOURCE_PATH = "tactile-resource-path";
+        private const string STYLESHEETS_PATH = "tactile-stylesheet-path";
 
         /// <summary>
         /// Parses the given UI document path.
@@ -32,6 +34,8 @@ namespace TactileModules.UIElementsCodeBehind {
             if (node.IsRoot) {
                 node.GenerateCodeBehind = xmlNode.Attribute(XName.Get(GENERATE_CODE_BEHIND)) != null;
                 node.Namespace = xmlNode.Attribute(XName.Get(GENERATED_NAMESPACE))?.Value;
+                node.ResourcePath = xmlNode.Attribute(XName.Get(RESOURCE_PATH))?.Value;
+                node.StylesheetsPath = xmlNode.Attribute(XName.Get(STYLESHEETS_PATH))?.Value;
             } else {
                 node.Namespace = xmlNode.Name.NamespaceName;
             }

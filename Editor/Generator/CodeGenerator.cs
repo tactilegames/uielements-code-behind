@@ -87,12 +87,17 @@ namespace TactileModules.UIElementsCodeBehind {
 		}
 		
 		private StringBuilder GenerateBindingsMethod(UxmlDocument uxml) {
-			var stringBuilder = new StringBuilder();
-
-			stringBuilder.AppendLine($"{DoIndent()}public void InitializeBindings(VisualElement rootVisualElement) {{");
-			indentation++;
-
-			stringBuilder.AppendLine($"{DoIndent()}RootVisualElement = rootVisualElement;");
+            var stringBuilder = new StringBuilder();
+			
+            if (ShouldAutoLoad(uxml)) {
+	            stringBuilder.AppendLine($"{DoIndent()}public VisualElement Initialize() {{");
+                indentation++;
+	            stringBuilder.AppendLine($"{DoIndent()}RootVisualElement = UnityEngine.Resources.Load<VisualTreeAsset>(\"{uxml.RootNode.ResourcePath}\").CloneTree();");
+            } else {
+				stringBuilder.AppendLine($"{DoIndent()}public void InitializeBindings(VisualElement rootVisualElement) {{");
+				indentation++;
+				stringBuilder.AppendLine($"{DoIndent()}RootVisualElement = rootVisualElement;");
+			}
 
 			stringBuilder.AppendLine();
 
@@ -100,11 +105,32 @@ namespace TactileModules.UIElementsCodeBehind {
 			foreach (var property in properties) {
 				stringBuilder.AppendLine($"{DoIndent()}{property.Name} = RootVisualElement.Q<{property.TypeName}>(\"{property.OriginalName}\");");	
 			}
+
+			if (ShouldAutoApplyStyleSheets(uxml)) {
+				stringBuilder.AppendLine();
+				var styleSheets = uxml.RootNode.StylesheetsPath.Split(',').Select(s => s.Trim(' '));
+				foreach (var styleSheet in styleSheets) {
+					stringBuilder.AppendLine($"{DoIndent()}RootVisualElement.styleSheets.Add(UnityEngine.Resources.Load<StyleSheet>(\"{styleSheet}\"));");
+				}
+			}
+			
+			if (ShouldAutoLoad(uxml)) {
+				stringBuilder.AppendLine();
+				stringBuilder.AppendLine($"{DoIndent()}return RootVisualElement;");
+			}
 			
 			indentation--;
 			stringBuilder.Append($"{DoIndent()}}}");
 			
 			return stringBuilder;
+		}
+
+		private bool ShouldAutoApplyStyleSheets(UxmlDocument uxml) {
+			return !string.IsNullOrWhiteSpace(uxml.RootNode.StylesheetsPath);
+		}
+
+		private static bool ShouldAutoLoad(UxmlDocument uxml) {
+			return !string.IsNullOrWhiteSpace(uxml.RootNode.ResourcePath);
 		}
 
 		private string GenerateBindings(UxmlDocument uxml) {
