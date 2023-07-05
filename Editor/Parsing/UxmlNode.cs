@@ -32,6 +32,16 @@ namespace TactileModules.UIElementsCodeBehind {
         public string Namespace { get; set; }
 
         /// <summary>
+        /// The path to load the UXML document from, and auto initialize
+        /// </summary>
+        public string ResourcePath { get; set; }
+
+        /// <summary>
+        /// The path to load the USS documents from, and auto apply. Can be a comma separated list.
+        /// </summary>
+        public string StylesheetsPath { get; set; }
+        
+        /// <summary>
         /// Gets the UXML child nodes.
         /// </summary>
         public IList<UxmlNode> Children { get; } = new List<UxmlNode>();
@@ -40,6 +50,7 @@ namespace TactileModules.UIElementsCodeBehind {
         /// Gets a boolean value that indicates if the current UXML node has a name.
         /// </summary>
         public bool HasName => !string.IsNullOrEmpty(Name);
+
 
         /// <summary>
         /// Creates a new <see cref="UxmlNode"/> instance.
