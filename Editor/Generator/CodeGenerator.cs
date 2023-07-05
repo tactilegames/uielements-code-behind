@@ -98,7 +98,7 @@ namespace TactileModules.UIElementsCodeBehind {
 
 			IEnumerable<UIProperty> properties = uxml.GetChildren().Select(x => new UIProperty(x.Type, x.Name)).ToList();
 			foreach (var property in properties) {
-				stringBuilder.AppendLine($"{DoIndent()}{property.Name} = RootVisualElement.Q<{property.TypeName}>(\"{property.Name}\");");	
+				stringBuilder.AppendLine($"{DoIndent()}{property.Name} = RootVisualElement.Q<{property.TypeName}>(\"{property.OriginalName}\");");	
 			}
 			
 			indentation--;
