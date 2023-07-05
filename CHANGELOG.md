@@ -1,5 +1,14 @@
 # com.tactilegames.uielements-code-behind
 
+## [1.6.0](https://github.com/tactilegames/uielements-code-behind/compare/v1.5.2...v1.6.0) (2023-07-05)
+
+### Feature
+
+Add auto loading of UXML and USS in generated code ([#8](https://github.com/tactilegames/uielements-code-behind/pull/8))  [Trond Glomnes](https://github.com/trondtactile)
+
+#### Description
+Added new attributes `tactile-resource-path` and `tactile-stylesheet-path` to allow the generated code to automatically load UXML and USS.
+
 ## [1.5.2](https://github.com/tactilegames/uielements-code-behind/compare/v1.5.1...v1.5.2) (2023-07-05)
 
 ### Bug Fix
