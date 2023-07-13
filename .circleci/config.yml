@@ -61,12 +61,12 @@ jobs:
           unity-version: <<parameters.unity-version>>
 
       - run-validation:
-          platform: ios
-          cheats: TACTILE_CHEATS
+          platform: <<parameters.platform>>
+          cheats: <<parameters.cheats>>
 
       - run-unit-tests:
-          platform: ios
-          cheats: TACTILE_CHEATS
+          platform: <<parameters.platform>>
+          cheats: <<parameters.cheats>>
 
       - store_artifacts:
           path: /root/test-results/nunit/results.xml
