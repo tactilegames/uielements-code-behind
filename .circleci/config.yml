@@ -39,7 +39,7 @@ workflows:
 jobs:
  
   commit-validation:
-    executor: unity-ios-<<parameters.unity-version>>
+    executor: unity-<<parameters.platform>>-<<parameters.unity-version>>
 
     parameters:
       platform:
