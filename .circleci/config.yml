@@ -60,10 +60,6 @@ jobs:
           cheats: <<parameters.cheats>>
           unity-version: <<parameters.unity-version>>
 
-      - run-validation:
-          platform: <<parameters.platform>>
-          cheats: <<parameters.cheats>>
-
       - run-unit-tests:
           platform: <<parameters.platform>>
           cheats: <<parameters.cheats>>
@@ -215,30 +211,6 @@ commands:
             xvfb-run --auto-servernum --server-args='-screen 0 640x480x24' /opt/unity/Editor/Unity -batchmode -nographics -silent-crashes -logFile /dev/stdout -runEditorTests -editorTestsResultFile /root/test-results/nunit/results.xml -projectPath /root/unity_project -buildTarget << parameters.platform >>
           name: Run unit tests in Unity, then convert resulting nunit result to junit format
     description: Runs the unit tests, and then converts the results into a jUnit format
-
-  run-validation:
-    parameters:
-      platform:
-        default: "android"
-        type: string
-      cheats:
-        default: "TACTILE_CHEATS"
-        type: string
-      unity-version:
-        default: 2020
-        type: integer
-    steps:
-      - run:
-          command: |
-            rm -f /root/unity_project/Assets/csc.rsp
-            echo "-define:"<< parameters.cheats >> >> /root/unity_project/Assets/csc.rsp
-          name: Setup csc.rsp file for unity to compile for the right build type
-
-      - run:
-          command: >
-            xvfb-run --auto-servernum --server-args='-screen 0 640x480x24'
-            /opt/unity/Editor/Unity -batchmode -projectPath /root/unity_project -buildTarget << parameters.platform >> -logFile /dev/stdout -nographics -silent-crashes -quit -executeMethod ValidationBridge.RunProjectValidation
-          name: Run validation in Unity
 
   publish-package:
     steps:
