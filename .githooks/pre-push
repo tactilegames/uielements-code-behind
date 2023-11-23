@@ -1,0 +1,4 @@
+#!/bin/sh
+# This is an intentionally empty pre-push hook.
+
+exit 0
