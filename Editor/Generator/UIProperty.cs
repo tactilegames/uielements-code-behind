@@ -12,7 +12,7 @@ namespace TactileModules.UIElementsCodeBehind {
         /// <summary>
         /// Gets the UI property type name as described in the UXML file.
         /// </summary>
-        public string TypeName { get; }
+        public string TypeName => Type.Name;
 
         /// <summary>
         /// Gets the UI property type as described in the UXML file.
@@ -31,7 +31,6 @@ namespace TactileModules.UIElementsCodeBehind {
 
         public UIProperty(string type, string name)
         {
-            TypeName = type;
             Type = UIPropertyTypes.GetUIElementType(type);
             OriginalName = name;
             Name = name.Contains("-") ? name.ToPascalCase() : OriginalName;

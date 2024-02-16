@@ -49,6 +49,9 @@ namespace TactileModules.UIElementsCodeBehind {
 		private StringBuilder GetImports(UxmlDocument uxml) {
 			var stringBuilder = new StringBuilder();
 			foreach (var @namespace in uxml.GetChildren().Select(node => node.Namespace).Distinct()) {
+				if (string.IsNullOrWhiteSpace(@namespace)) {
+					continue;
+				}
 				stringBuilder.AppendLine($"using {@namespace};");
 			}
 
