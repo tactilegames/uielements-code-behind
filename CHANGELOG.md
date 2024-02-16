@@ -1,5 +1,14 @@
 # com.tactilegames.uielements-code-behind
 
+## [1.6.1](https://github.com/tactilegames/uielements-code-behind/compare/v1.6.0...v1.6.1) (2024-02-16)
+
+### Bug Fix
+
+Template support ([#9](https://github.com/tactilegames/uielements-code-behind/pull/9))  [Trond Glomnes](https://github.com/trondtactile)
+
+#### Description
+Now correctly handles cases where UXML has `Template` and `Instance` usage, by mapping those properties to `VisualElement`.
+
 ## [1.6.0](https://github.com/tactilegames/uielements-code-behind/compare/v1.5.2...v1.6.0) (2023-07-05)
 
 ### Feature
