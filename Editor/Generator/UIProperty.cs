@@ -29,9 +29,8 @@ namespace TactileModules.UIElementsCodeBehind {
         /// </summary>
         public string OriginalName { get; }
 
-        public UIProperty(string type, string name)
-        {
-            Type = UIPropertyTypes.GetUIElementType(type);
+        public UIProperty(Type type, string name) {
+            Type = type;
             OriginalName = name;
             Name = name.Contains("-") ? name.ToPascalCase() : OriginalName;
         }

@@ -16,7 +16,7 @@ namespace TactileModules.UIElementsCodeBehind {
             }
             
             var uiElementType = uiElementTypes.FirstOrDefault(type => type.Name == uiElementName);
-            return uiElementType ?? uiElementTypes.First(type => type.FullName == uiElementName);
+            return uiElementType ?? uiElementTypes.FirstOrDefault(type => type.FullName == uiElementName);
         }
     }
 

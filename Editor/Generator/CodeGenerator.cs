@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using UnityEngine.UIElements;
 
 namespace TactileModules.UIElementsCodeBehind {
 
@@ -36,6 +37,8 @@ namespace TactileModules.UIElementsCodeBehind {
 
 {GetClassStart(uxml)}
 
+{GenerateEvents(uxml)}
+
 {GenerateProperties(uxml)}
 
 {GenerateBindingsMethod(uxml)}
@@ -48,6 +51,9 @@ namespace TactileModules.UIElementsCodeBehind {
 
 		private StringBuilder GetImports(UxmlDocument uxml) {
 			var stringBuilder = new StringBuilder();
+			
+			stringBuilder.AppendLine("using System;");
+			
 			foreach (var @namespace in uxml.GetChildren().Select(node => node.Namespace).Distinct()) {
 				if (string.IsNullOrWhiteSpace(@namespace)) {
 					continue;
@@ -75,6 +81,26 @@ namespace TactileModules.UIElementsCodeBehind {
 			return classStart;
 		}
 
+		private string GenerateEvents(UxmlDocument uxml) {
+			var stringBuilder = new StringBuilder();
+
+			var nodes = uxml.GetChildren().Where(node => node.EventName != null).ToList();
+
+			foreach (var node in nodes) {
+				if (node.Type == typeof(Button)) {
+					stringBuilder.AppendLine($"{DoIndent()}public event Action {node.EventName};");
+				}else if(node.Type == typeof(Toggle)){
+					stringBuilder.AppendLine($"{DoIndent()}public event Action<bool> {node.EventName};");
+				}else if(node.Type == typeof(TextField)){
+					stringBuilder.AppendLine($"{DoIndent()}public event Action<string> {node.EventName};");
+				} else {
+					throw new NotSupportedException($"Event generation for {node.Type} is not supported.");
+				}
+			}
+			
+			return stringBuilder.ToString();	
+		}
+		
 		private StringBuilder GenerateProperties(UxmlDocument uxml) {
 			var stringBuilder = new StringBuilder();
 			stringBuilder.Append(@$"{DoIndent()}public VisualElement RootVisualElement {{get; private set;}}");
@@ -114,6 +140,17 @@ namespace TactileModules.UIElementsCodeBehind {
 				var styleSheets = uxml.RootNode.StylesheetsPath.Split(',').Select(s => s.Trim(' '));
 				foreach (var styleSheet in styleSheets) {
 					stringBuilder.AppendLine($"{DoIndent()}RootVisualElement.styleSheets.Add(UnityEngine.Resources.Load<StyleSheet>(\"{styleSheet}\"));");
+				}
+			}
+
+			stringBuilder.AppendLine();
+			foreach (var property in uxml.GetChildren().Where(node => node.EventName != null)) {
+				if (property.Type == typeof(Button)) {
+					stringBuilder.AppendLine($"{DoIndent()}{property.Name}.clicked += () => {property.EventName}?.Invoke();");
+				}else if(property.Type == typeof(Toggle) || property.Type == typeof(TextField)){
+					stringBuilder.AppendLine($"{DoIndent()}{property.Name}.RegisterValueChangedCallback(evt => {property.EventName}?.Invoke(evt.newValue));");
+				}else {
+					throw new NotSupportedException($"Event generation for {property.Type} is not supported.");
 				}
 			}
 			

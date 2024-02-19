@@ -10,7 +10,8 @@ You have the following options to configure the code generation:
 * `tactile-namespace="MY_NAMESPACE"`: Set the namespace of the generated code. Defaults to no namespace.
 * `tactile-resource-path="MY_RESOURCE_PATH"`: If set, the generated code will load the UXML from the specified path, and initialize the visual element itself. Else, the generated code will only initialize the binding, and you will have to clone the `VisualTree` yourself.
 * `tactile-stylesheet-path="MY_STYLESHEET_PATH"`: If set, the generated code will load the USS from the specified path, and apply it to the root visual element. This can be a comma-separated list of paths.
-
+* `tactile-event-name="MY_EVENT_NAME"`: If set, the generated code will add an event for the node, and invoke it based on node type. Buttons on click, toggles on toggle, text fields on change, etc.
+ 
 Create a public partial class with the same name as the UI document. Whenever the UI is about to show, call the `InitializeBinding` method in the generated partial class, and pass in the root `VisualElement` of the UI you want to show. 
 
 In order to get a hold of the root `VisualElement`, call `Instantiate` on your `VisualTreeAsset`, which is like the "prefab" for an UI document.
