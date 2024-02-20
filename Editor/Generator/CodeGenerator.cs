@@ -3,12 +3,21 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using UnityEditor.UIElements;
 using UnityEngine.UIElements;
 
 namespace TactileModules.UIElementsCodeBehind {
 
 	public class CodeGenerator {
 
+		private readonly Dictionary<Type, Type> eventTypes = new() {
+			{typeof(Button), null},
+			{typeof(Toggle), typeof(bool)},
+			{typeof(TextField), typeof(string)},
+			{typeof(Slider), typeof(float)},
+			{typeof(ToolbarSearchField), typeof(string)}
+		};
+		
 		private int indentation;
 		
 		internal RosalinaGenerationResult Generate(UIDocumentAsset uiDocumentAsset, string outputPath) {
@@ -87,15 +96,13 @@ namespace TactileModules.UIElementsCodeBehind {
 			var nodes = uxml.GetChildren().Where(node => node.EventName != null).ToList();
 
 			foreach (var node in nodes) {
-				if (node.Type == typeof(Button)) {
-					stringBuilder.AppendLine($"{DoIndent()}public event Action {node.EventName};");
-				}else if(node.Type == typeof(Toggle)){
-					stringBuilder.AppendLine($"{DoIndent()}public event Action<bool> {node.EventName};");
-				}else if(node.Type == typeof(TextField)){
-					stringBuilder.AppendLine($"{DoIndent()}public event Action<string> {node.EventName};");
-				} else {
+				if(!eventTypes.TryGetValue(node.Type, out var eventType)) {
 					throw new NotSupportedException($"Event generation for {node.Type} is not supported.");
 				}
+
+				stringBuilder.AppendLine(eventType == null
+					? $"{DoIndent()}public event Action {node.EventName};"
+					: $"{DoIndent()}public event Action<{eventType}> {node.EventName};");
 			}
 			
 			return stringBuilder.ToString();	
@@ -145,13 +152,13 @@ namespace TactileModules.UIElementsCodeBehind {
 
 			stringBuilder.AppendLine();
 			foreach (var property in uxml.GetChildren().Where(node => node.EventName != null)) {
-				if (property.Type == typeof(Button)) {
-					stringBuilder.AppendLine($"{DoIndent()}{property.Name}.clicked += () => {property.EventName}?.Invoke();");
-				}else if(property.Type == typeof(Toggle) || property.Type == typeof(TextField)){
-					stringBuilder.AppendLine($"{DoIndent()}{property.Name}.RegisterValueChangedCallback(evt => {property.EventName}?.Invoke(evt.newValue));");
-				}else {
+				if(!eventTypes.TryGetValue(property.Type, out var eventType)) {
 					throw new NotSupportedException($"Event generation for {property.Type} is not supported.");
 				}
+ 
+				stringBuilder.AppendLine(eventType == null
+					? $"{DoIndent()}{property.Name}.clicked += () => {property.EventName}?.Invoke();"
+					: $"{DoIndent()}{property.Name}.RegisterValueChangedCallback(evt => {property.EventName}?.Invoke(evt.newValue));");
 			}
 			
 			if (ShouldAutoLoad(uxml)) {
