@@ -10,7 +10,7 @@ namespace TactileModules.UIElementsCodeBehind {
 
 	public class CodeGenerator {
 
-		private readonly Dictionary<Type, Type> eventTypes = new() {
+		private readonly Dictionary<Type, Type> eventTypes = new Dictionary<Type, Type> {
 			{typeof(Button), null},
 			{typeof(Toggle), typeof(bool)},
 			{typeof(TextField), typeof(string)},
