@@ -3,11 +3,21 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using UnityEditor.UIElements;
+using UnityEngine.UIElements;
 
 namespace TactileModules.UIElementsCodeBehind {
 
 	public class CodeGenerator {
 
+		private readonly Dictionary<Type, Type> eventTypes = new Dictionary<Type, Type> {
+			{typeof(Button), null},
+			{typeof(Toggle), typeof(bool)},
+			{typeof(TextField), typeof(string)},
+			{typeof(Slider), typeof(float)},
+			{typeof(ToolbarSearchField), typeof(string)}
+		};
+		
 		private int indentation;
 		
 		internal RosalinaGenerationResult Generate(UIDocumentAsset uiDocumentAsset, string outputPath) {
@@ -36,6 +46,8 @@ namespace TactileModules.UIElementsCodeBehind {
 
 {GetClassStart(uxml)}
 
+{GenerateEvents(uxml)}
+
 {GenerateProperties(uxml)}
 
 {GenerateBindingsMethod(uxml)}
@@ -48,6 +60,9 @@ namespace TactileModules.UIElementsCodeBehind {
 
 		private StringBuilder GetImports(UxmlDocument uxml) {
 			var stringBuilder = new StringBuilder();
+			
+			stringBuilder.AppendLine("using System;");
+			
 			foreach (var @namespace in uxml.GetChildren().Select(node => node.Namespace).Distinct()) {
 				if (string.IsNullOrWhiteSpace(@namespace)) {
 					continue;
@@ -75,6 +90,24 @@ namespace TactileModules.UIElementsCodeBehind {
 			return classStart;
 		}
 
+		private string GenerateEvents(UxmlDocument uxml) {
+			var stringBuilder = new StringBuilder();
+
+			var nodes = uxml.GetChildren().Where(node => node.EventName != null).ToList();
+
+			foreach (var node in nodes) {
+				if(!eventTypes.TryGetValue(node.Type, out var eventType)) {
+					throw new NotSupportedException($"Event generation for {node.Type} is not supported.");
+				}
+
+				stringBuilder.AppendLine(eventType == null
+					? $"{DoIndent()}public event Action {node.EventName};"
+					: $"{DoIndent()}public event Action<{eventType}> {node.EventName};");
+			}
+			
+			return stringBuilder.ToString();	
+		}
+		
 		private StringBuilder GenerateProperties(UxmlDocument uxml) {
 			var stringBuilder = new StringBuilder();
 			stringBuilder.Append(@$"{DoIndent()}public VisualElement RootVisualElement {{get; private set;}}");
@@ -115,6 +148,17 @@ namespace TactileModules.UIElementsCodeBehind {
 				foreach (var styleSheet in styleSheets) {
 					stringBuilder.AppendLine($"{DoIndent()}RootVisualElement.styleSheets.Add(UnityEngine.Resources.Load<StyleSheet>(\"{styleSheet}\"));");
 				}
+			}
+
+			stringBuilder.AppendLine();
+			foreach (var property in uxml.GetChildren().Where(node => node.EventName != null)) {
+				if(!eventTypes.TryGetValue(property.Type, out var eventType)) {
+					throw new NotSupportedException($"Event generation for {property.Type} is not supported.");
+				}
+ 
+				stringBuilder.AppendLine(eventType == null
+					? $"{DoIndent()}{property.Name}.clicked += () => {property.EventName}?.Invoke();"
+					: $"{DoIndent()}{property.Name}.RegisterValueChangedCallback(evt => {property.EventName}?.Invoke(evt.newValue));");
 			}
 			
 			if (ShouldAutoLoad(uxml)) {

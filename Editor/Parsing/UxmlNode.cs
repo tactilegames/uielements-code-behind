@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 
 namespace TactileModules.UIElementsCodeBehind {
@@ -9,7 +10,7 @@ namespace TactileModules.UIElementsCodeBehind {
         /// <summary>
         /// Gets the current UXML node type.
         /// </summary>
-        public string Type { get; }
+        public Type Type { get; }
 
         /// <summary>
         /// Gets the UXML node name.
@@ -30,6 +31,11 @@ namespace TactileModules.UIElementsCodeBehind {
         /// What namespace should the code behind be generated under.
         /// </summary>
         public string Namespace { get; set; }
+        
+        /// <summary>
+        /// The name of the event to generate.
+        /// </summary>
+        public string EventName { get; set; }
 
         /// <summary>
         /// The path to load the UXML document from, and auto initialize
@@ -58,7 +64,7 @@ namespace TactileModules.UIElementsCodeBehind {
         /// <param name="type">Node type.</param>
         /// <param name="name">Node name.</param>
         /// <param name="isRoot">Is root node.</param>
-        public UxmlNode(string type, string name, bool isRoot = false)
+        public UxmlNode(Type type, string name, bool isRoot = false)
         {
             Type = type;
             Name = name;
