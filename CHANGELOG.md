@@ -1,5 +1,14 @@
 # com.tactilegames.uielements-code-behind
 
+## [1.7.0](https://github.com/tactilegames/uielements-code-behind/compare/v1.6.1...v1.7.0) (2024-02-21)
+
+### Feature
+
+Now supports generating events for nodes ([#10](https://github.com/tactilegames/uielements-code-behind/pull/10))  [Trond Glomnes](https://github.com/trondtactile)
+
+#### Description
+Now supports generating events for nodes by adding the attribute `tactile-event-name`.
+
 ## [1.6.1](https://github.com/tactilegames/uielements-code-behind/compare/v1.6.0...v1.6.1) (2024-02-16)
 
 ### Bug Fix
