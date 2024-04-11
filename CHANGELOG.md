@@ -1,5 +1,17 @@
 # com.tactilegames.uielements-code-behind
 
+## [1.7.1](https://github.com/tactilegames/uielements-code-behind/compare/v1.7.0...v1.7.1) (2024-04-11)
+
+### Bug Fix
+
+Fixed issue where no named elements would cause a compiled class that does not compile ([#11](https://github.com/tactilegames/uielements-code-behind/pull/11))  [Trond Glomnes](https://github.com/trondtactile)
+
+#### Description
+Fixed issue where no named elements would cause a compiled class that does not compile
+
+#### Ticket(s)
+https://tactileentertainment.atlassian.net/browse/USM-1471
+
 ## [1.7.0](https://github.com/tactilegames/uielements-code-behind/compare/v1.6.1...v1.7.0) (2024-02-21)
 
 ### Feature
