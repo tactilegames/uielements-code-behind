@@ -58,19 +58,17 @@ namespace TactileModules.UIElementsCodeBehind {
 ";
 		}
 
-		private StringBuilder GetImports(UxmlDocument uxml) {
-			var stringBuilder = new StringBuilder();
+		private string GetImports(UxmlDocument uxml) {
+			var hashSet = new HashSet<string> {
+				"using System;",
+				"using UnityEngine.UIElements;"
+			};
 			
-			stringBuilder.AppendLine("using System;");
-			
-			foreach (var @namespace in uxml.GetChildren().Select(node => node.Namespace).Distinct()) {
-				if (string.IsNullOrWhiteSpace(@namespace)) {
-					continue;
-				}
-				stringBuilder.AppendLine($"using {@namespace};");
+			foreach (var node in uxml.GetChildren()) {
+				hashSet.Add($"using {node.Type.Namespace};");
 			}
-
-			return stringBuilder;
+			
+			return string.Join("\n", hashSet);
 		}
 
 		private string GetNamespaceStart(UxmlDocument uxmlDocument) {
