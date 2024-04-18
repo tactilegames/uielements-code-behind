@@ -8,7 +8,7 @@ all-cheats: &all-cheats [
 ]
 
 all-unity-versions: &all-unity-versions [
-2020, 2021, 
+2020,2021,2022
 ]
 
 workflows:
