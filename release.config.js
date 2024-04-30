@@ -6,13 +6,13 @@ module.exports = {
     ['@semantic-release/commit-analyzer', {
       preset: 'conventionalcommits',
       releaseRules: [
-        {type: 'feat', release: 'minor'},
-        {type: 'refactor', release: 'minor'},
-        {type: 'fix', release: 'patch'},
-        {type: 'style', release: 'patch'},
-        {type: 'docs', release: 'patch'},
-        {type: 'perf', release: 'patch'},
-        {type: 'test', release: 'patch'}
+        { type: 'feat', release: 'minor' },
+        { type: 'refactor', release: 'minor' },
+        { type: 'fix', release: 'patch' },
+        { type: 'style', release: 'patch' },
+        { type: 'docs', release: 'patch' },
+        { type: 'perf', release: 'patch' },
+        { type: 'test', release: 'patch' }
       ]
     }],
     ['@semantic-release/release-notes-generator', {
@@ -22,7 +22,7 @@ module.exports = {
           { type: 'feat', section: 'Features' },
           { type: 'refactor', section: 'Refactoring', hidden: false },
           { type: 'fix', section: 'Bug Fixes' },
-          { type: 'style', section: 'Code Style'},
+          { type: 'style', section: 'Code Style' },
           { type: 'docs', section: 'Documentation', hidden: false },
           { type: 'perf', section: 'Performance', hidden: false },
           { type: 'test', section: 'Tests', hidden: false }
