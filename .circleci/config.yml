@@ -15,8 +15,11 @@ workflows:
   version: 2.1
   verify-development-commit:
     jobs:
+      - custom-step 
       - devops-tactile-package-orb/commit-validation-ios:
           platform: "ios"
+          requires:
+            - custom-step
           context:
             - CLIENT_PACKAGES
           matrix:
@@ -25,6 +28,8 @@ workflows:
               unity-version: *all-unity-versions
       - devops-tactile-package-orb/commit-validation-android:
           platform: "android"
+          requires:
+            - custom-step
           context:
             - CLIENT_PACKAGES
           matrix:
@@ -37,6 +42,25 @@ workflows:
           requires:
             - devops-tactile-package-orb/commit-validation-ios
             - devops-tactile-package-orb/commit-validation-android
+            - custom-step
           filters:
             branches:
               only: ["master"]
+            
+jobs:
+  custom-step:
+    docker:
+      - image: cimg/python:3.8
+    resource_class: tactilegames/k3s-tactile-hosted-container-runner
+    steps:
+      - checkout
+      - run:
+          name: Run custom script if any
+          command: |
+            if [ -f ".circleci/custom-step" ]; then
+              chmod +x .circleci/custom-step
+              echo "Custom step exists, running script..."
+              ./.circleci/custom-step
+            else
+              echo "No custom step. Skipping..."
+            fi
