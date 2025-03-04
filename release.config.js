@@ -10,7 +10,7 @@ module.exports = {
         { type: 'refactor', release: 'minor' },
         { type: 'fix', release: 'patch' },
         { type: 'style', release: 'patch' },
-        { type: 'docs', release: 'patch' },
+        { type: 'docs', release: false },
         { type: 'perf', release: 'patch' },
         { type: 'test', release: 'patch' }
       ]
