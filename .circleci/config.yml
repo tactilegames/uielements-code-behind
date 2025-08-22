@@ -51,7 +51,7 @@ jobs:
   custom-step:
     docker:
       - image: cimg/python:3.8
-    resource_class: large
+    resource_class: tactilegames/k3s-tactile-hosted-container-runner
     steps:
       - checkout
       - run:
